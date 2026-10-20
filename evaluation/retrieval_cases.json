@@ -1,0 +1,19 @@
+{
+    "cases": [
+      {
+        "question": "E42 sıcaklık sensörü hatası nedir, nasıl giderilir ve tekrarlandığında ne yapılmalıdır?",
+        "relevant_chunk_ids": [
+          "18419456c1bf326f-4-2",
+          "18419456c1bf326f-4-3"
+        ]
+      },
+      {
+        "question": "E31 ağ bağlantısı hatasının nedenleri, çözümü ve LIMS veri aktarımıyla ilişkisi nedir?",
+        "relevant_chunk_ids": [
+          "18419456c1bf326f-4-1",
+          "18419456c1bf326f-4-2",
+          "18419456c1bf326f-6-2"
+        ]
+      }
+    ]
+  }
