@@ -1,3 +1,4 @@
+
 import argparse
 import hashlib
 import json
@@ -20,23 +21,42 @@ def chunk_text(
     if not 0 <= overlap < chunk_size:
         raise ValueError("Geçersiz örtüşme (overlap) değeri.")
 
-    text = " ".join(text.split())
-
+    words = text.split()
     chunks = []
     start = 0
 
-    while start < len(text):
-        end = min(start + chunk_size, len(text))
+    while start < len(words):
+        end = start
+        length = 0
 
-        chunk = text[start:end].strip()
+        while end < len(words):
+            next_length = len(words[end]) + (1 if end > start else 0)
 
-        if chunk:
-            chunks.append(chunk)
+            if end > start and length + next_length > chunk_size:
+                break
 
-        if end == len(text):
+            length += next_length
+            end += 1
+
+        chunks.append(" ".join(words[start:end]))
+
+        if end == len(words):
             break
 
-        start = end - overlap
+        next_start = end
+        overlap_length = 0
+
+        while next_start > start:
+            word_length = len(words[next_start - 1])
+            extra = word_length + (1 if overlap_length else 0)
+
+            if overlap_length + extra > overlap:
+                break
+
+            overlap_length += extra
+            next_start -= 1
+
+        start = next_start if next_start > start else end
 
     return chunks
 
@@ -59,8 +79,7 @@ def process_pdf(
     if reader.is_encrypted:
         raise ValueError("Şifreli PDF dosyaları desteklenmiyor.")
 
-    # dosyaya aslında tanımladığımız bir kimlik no eğer dosya adı veya dosya içeriği değişirse bu da değişir
-    document_id = hashlib.sha256( 
+    document_id = hashlib.sha256(
         pdf_path.read_bytes()
     ).hexdigest()[:16]
 
